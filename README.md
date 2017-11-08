@@ -29,9 +29,7 @@ Oheneba
     HC-SR04: Ultrasonic sensor<br>
     APDS-9301: Ambient light sensor<br>
     IR LED <br><br><br>
-    </p>
-
-    <p>
+    </p><p>
     <B>Communication</B><br>
     I2C, UART, Serial<br>
     </p>
