@@ -1,0 +1,5 @@
+F:\OneDrive\Metropolia\Devices\Workspaces\Workspace 1\Zumo4\Zumo01\ZumoBot.cydsn\ZumoBot.cyprj|176b7d06-c8bc-4741-9edf-4958865dccbe
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|6c1b8c96-8a29-464b-84c3-35c594631c40
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|ea328c13-0046-436e-a9b9-9501c1342a40
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|2fe164f9-3d75-4ad7-b0eb-5537e8a6c7be
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ef4e08ca-3590-43bd-b6b2-6ce5dea77617

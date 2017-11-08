@@ -1,0 +1,55 @@
+ARM GAS  C:\Users\vedranb\AppData\Local\Temp\ccHQuyzV.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"music.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              	.Letext0:
+  19              		.section	.debug_line,"",%progbits
+  20              	.Ldebug_line0:
+  21              		.section	.debug_str,"MS",%progbits,1
+  22              	.LASF0:
+  23 0000 463A5C4F 		.ascii	"F:\\OneDrive\\Metropolia\\Devices\\Workspaces\\Work"
+  23      6E654472 
+  23      6976655C 
+  23      4D657472 
+  23      6F706F6C 
+  24 002e 73706163 		.ascii	"space 1\\Zumo4\\Zumo01\\ZumoBot.cydsn\000"
+  24      6520315C 
+  24      5A756D6F 
+  24      345C5A75 
+  24      6D6F3031 
+  25              	.LASF1:
+  26 0051 6D757369 		.ascii	"music.c\000"
+  26      632E6300 
+  27              	.LASF2:
+  28 0059 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+  28      4320342E 
+  28      392E3320 
+  28      32303135 
+  28      30333033 
+  29 008c 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+  29      20726576 
+  29      6973696F 
+  29      6E203232 
+  29      31323230 
+  30 00bf 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+  30      66756E63 
+  30      74696F6E 
+  30      2D736563 
+  30      74696F6E 
+  31              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
