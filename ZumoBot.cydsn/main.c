@@ -51,16 +51,19 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
-/*//play music
+//drive
 int main(){
-    int i;
-    
+    //int i    
     motor_start();
     
-    for(i=1; i<0; i++){
-        motor_forward(i*10, 500);
-        motor_backward(i*10, 500);
-    }
+    motor_forward(100, 5500); //at speed 50 approx 10 cm per second
+    motor_turn(200, 0, 360);
+    motor_forward(100, 4900); //at speed 50 approx 10 cm per second
+    motor_turn(200, 0, 360);
+    motor_forward(100, 6600); //at speed 50 approx 10 cm per second
+    
+    motor_turn(200, 0, 700);
+    motor_turn(43, 60, 12200);
     
     motor_stop();
     return 0;
