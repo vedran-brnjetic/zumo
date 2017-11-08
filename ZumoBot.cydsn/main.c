@@ -51,7 +51,7 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
-/*/play music
+/*//play music
 int main(){
     int i;
     
@@ -225,7 +225,7 @@ int main()
 //*/
 
 
-///reflectance//
+/*//reflectance//
 int main()
 {
     struct sensors_ ref;
