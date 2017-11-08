@@ -2,12 +2,12 @@
 
 Team 2 Zumo race program in the International Studies group of Metropolia university IT Bachelor's degree.
 
-Team members:
+<B>Team members:<\B>
 
-Vedran Brnjetic
-Thanh
-Jamie
-Oheneba
+Vedran Brnjetic<br>
+Thanh<br>
+Jamie<br>
+Oheneba<br><br>
 
 
 <br><br>
