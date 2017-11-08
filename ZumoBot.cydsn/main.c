@@ -56,18 +56,33 @@ int main(){
     //int i    
     motor_start();
     
+    //delay of execution
+    //speed from 0-255, time in miliseconds
     motor_forward(0, 3000);
+    
+    //first line
     motor_forward(100, 5600); //at speed 50 approx 10 cm per second
+    //speed of left motor, speed of right motor, time in milisecnods
     motor_turn(200, 0, 358);
+    
+    //second line
     motor_forward(100, 4180); //at speed 50 approx 10 cm per second
     motor_turn(200, 0, 370);
+    
+    //third line
     motor_forward(100, 5580); //at speed 50 approx 10 cm per second
     
+    
+    //sharp turn
     motor_turn(200, 0, 690);
+    //smooth curve
     motor_turn(40, 60, 12200);
     
     motor_stop();
     return 0;
+    
+    //After some testing, batteries gave up at 4.8 V - 
+    //First the timings got shortened, later the motors no longer ran
 }//*/
 
 /*//battery level//
