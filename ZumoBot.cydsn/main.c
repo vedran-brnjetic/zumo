@@ -51,9 +51,15 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
-///drive
+
+
+/*//drive
 int main(){
     //int i    
+    CyGlobalIntEnable; 
+    UART_1_Start();
+    
+    //while(!(get_IR())){}
     motor_start();
     
     //delay of execution
@@ -61,20 +67,20 @@ int main(){
     motor_forward(0, 3000);
     
     //first line
-    motor_forward(100, 5600); //at speed 50 approx 10 cm per second
+    motor_forward(100, 5460); //at speed 50 approx 10 cm per second
     //speed of left motor, speed of right motor, time in milisecnods
-    motor_turn(200, 0, 358);
+    motor_turn(205, 0, 360);
     
     //second line
-    motor_forward(100, 4180); //at speed 50 approx 10 cm per second
-    motor_turn(200, 0, 370);
+    motor_forward(100, 4000); //at speed 50 approx 10 cm per second
+    motor_turn(205, 0, 360);
     
     //third line
-    motor_forward(100, 5580); //at speed 50 approx 10 cm per second
+    motor_forward(100, 5480); //at speed 50 approx 10 cm per second
     
     
     //sharp turn
-    motor_turn(200, 0, 690);
+    motor_turn(205, 0, 660);
     //smooth curve
     motor_turn(40, 60, 12200);
     
