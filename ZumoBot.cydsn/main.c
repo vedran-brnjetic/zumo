@@ -91,6 +91,70 @@ int main(){
     //First the timings got shortened, later the motors no longer ran
 }//*/
 
+/// Follow a line
+int main(void)
+{
+    struct sensors_ ref;
+    struct sensors_ dig;
+    CyGlobalIntEnable; 
+    UART_1_Start();
+  
+    sensor_isr_StartEx(sensor_isr_handler);
+    
+    reflectance_start();
+
+    IR_led_Write(1);
+   
+    
+    
+    reflectance_read(&ref);
+    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+    CyDelay(49);
+    reflectance_read(&ref);
+    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+    CyDelay(49);
+    
+    reflectance_read(&ref);
+    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+    CyDelay(49);
+    
+    reflectance_read(&ref);
+    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+    
+    motor_start();
+    
+    while(ref.l1 > 18000 || ref.r1 > 18000){
+        reflectance_read(&ref);
+    
+        if(ref.l1 > 18000 && ref.r1 > 18000){
+            motor_forward(50,50);  
+        }
+        else if(ref.l1 < 18000){
+            while(!(ref.l1 > 18000 && ref.r1 > 18000)){
+                motor_turn(50, 0, 5);
+                reflectance_read(&ref);
+            }
+        }
+        else if(ref.r1 < 18000){
+            while(!(ref.l1 > 18000 && ref.r1 > 18000)){
+                motor_turn(0, 50, 5);
+                reflectance_read(&ref);
+            }
+        }
+            
+        //printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+        
+        CyDelay(49);
+    }
+    
+    motor_stop();
+
+
+}
+
+
+//*/
+/*//  Sensor testing
 int main(void)
 {
     struct sensors_ ref;
@@ -124,7 +188,7 @@ int main(void)
     
     
 return 0;
-}
+}//*/
 
 /*//battery level//
 int main()
