@@ -104,22 +104,23 @@ int main(void)
 
     IR_led_Write(1);
     
-  //  motor_start();
+  motor_start();
     
     //motor_backward(20,10000);
     //unsigned i;
-    for(; ; )
+    reflectance_read(&ref);
+    
+    while(ref.l1 < 18000 && ref.r1 < 18000 )
     {
         reflectance_read(&ref);
         printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
-        reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance period
-        printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
+        motor_backward(50, 50);
         
-        CyDelay(100);
+        CyDelay(49);
     }
     
     
-    //motor_stop();
+    motor_stop();
     
     
 return 0;
