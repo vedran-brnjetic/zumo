@@ -106,20 +106,10 @@ int main(void)
     IR_led_Write(1);
    
     
-    
-    reflectance_read(&ref);
-    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
-    CyDelay(49);
-    reflectance_read(&ref);
-    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
-    CyDelay(49);
-    
-    reflectance_read(&ref);
-    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
-    CyDelay(49);
-    
-    reflectance_read(&ref);
-    printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
+    //clear the initial sensor state (discharge the capacitor for the first time)
+    while(ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1){
+        reflectance_read(&ref);
+    }
     
     motor_start();
     
@@ -142,8 +132,7 @@ int main(void)
             }
         }
             
-        //printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);
-        
+     
         CyDelay(49);
     }
     
