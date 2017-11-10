@@ -91,6 +91,40 @@ int main(){
     //First the timings got shortened, later the motors no longer ran
 }//*/
 
+int main(void)
+{
+    struct sensors_ ref;
+    struct sensors_ dig;
+    CyGlobalIntEnable; 
+    UART_1_Start();
+  
+    sensor_isr_StartEx(sensor_isr_handler);
+    
+    reflectance_start();
+
+    IR_led_Write(1);
+    
+  //  motor_start();
+    
+    //motor_backward(20,10000);
+    //unsigned i;
+    for(; ; )
+    {
+        reflectance_read(&ref);
+        printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
+        reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance period
+        printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
+        
+        CyDelay(100);
+    }
+    
+    
+    //motor_stop();
+    
+    
+return 0;
+}
+
 /*//battery level//
 int main()
 {
