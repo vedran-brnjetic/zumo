@@ -42,6 +42,7 @@
 #include "Ambient.h"
 #include "Beep.h"
 #include "music.h"
+#include <math.h>
 
 int rread(void);
 
@@ -51,7 +52,91 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
+///Serious attempt
+int main(void){
 
+    struct sensors_ ref;
+    struct sensors_ dig;
+    CyGlobalIntEnable; 
+    UART_1_Start();
+  
+    sensor_isr_StartEx(sensor_isr_handler);
+    
+    reflectance_start();
+
+    IR_led_Write(1);
+   
+    
+    //clear the initial sensor state (discharge the capacitor for the first time)
+    while(ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1){
+        reflectance_read(&ref);
+    }
+    
+    motor_start();
+    
+    /*//drive up to the first line
+    do{
+        motor_forward(100, 5);
+    }while( !dig.l3 && !dig.r3);
+    //*/
+    
+    /*//Wait for the IR signal
+    while(!(get_IR())){}
+    //*/
+    
+    ///GO!
+    int stop = 0;
+    while(stop < 2){
+        
+        int speed, break_factor;
+        if(stop == 0){ 
+            speed = 255;
+            break_factor = 20;
+        }
+        else{ 
+            speed = 50;
+            break_factor = 4;
+        }
+        
+        reflectance_read(&ref);
+        if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){
+            
+            motor_forward(speed, 10);
+        }
+        else if(ref.l1 != ref.r1){
+            //max and min are to calculate the factor of the turn
+            //r and l to pick the correct motor to slow down
+            int max, min, r = 0, l = 0;
+            
+            do{
+                if(ref.l1 > ref.r1){max = ref.l1; min = ref.r1; l = 1;}
+                else{max = ref.r1; min = ref.l1; r = 1;}
+            
+            
+                motor_turn(
+                    //scale down speed by factor between 1 and 2
+                                                           //further reduce speed to turn
+                    (int)((float)speed / (2-(1-(((float)max/min)/8))) ) - (l * break_factor * (max/min)), 
+                    (int)((float)speed / (2-(1-(((float)max/min)/8))) ) - (r * break_factor * (max/min)), 
+                     5);
+                reflectance_read(&ref);
+                //reset direction
+                r = 0; l = 0;    
+            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000));
+            
+            
+        }
+        else
+        {
+            stop ++;
+        }
+        
+    }
+    
+    motor_stop();
+    return 0;
+}
+//*/
 
 /*//drive
 int main(){
@@ -59,7 +144,7 @@ int main(){
     CyGlobalIntEnable; 
     UART_1_Start();
     
-    //while(!(get_IR())){}
+    while(!(get_IR())){}
     motor_start();
     
     //delay of execution
@@ -91,7 +176,7 @@ int main(){
     //First the timings got shortened, later the motors no longer ran
 }//*/
 
-/// Follow a line
+/*// Follow a line
 int main(void)
 {
     struct sensors_ ref;
