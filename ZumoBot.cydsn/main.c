@@ -86,16 +86,17 @@ int main(void){
     
     ///GO!
     int stop = 0;
-    while(stop < 2){
-        
-        int speed, break_factor;
+    int speed, break_factor;
+    
+    while(stop < 2){    
+       
         if(stop == 0){ 
             speed = 255;
-            break_factor = 20;
+            break_factor = 15;
         }
         else{ 
             speed = 50;
-            break_factor = 4;
+            break_factor = 3;
         }
         
         reflectance_read(&ref);
@@ -116,8 +117,8 @@ int main(void){
                 motor_turn(
                     //scale down speed by factor between 1 and 2
                                                            //further reduce speed to turn
-                    (int)((float)speed / (2-(1-(((float)max/min)/8))) ) - (l * break_factor * (max/min)), 
-                    (int)((float)speed / (2-(1-(((float)max/min)/8))) ) - (r * break_factor * (max/min)), 
+                    (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (l * break_factor * (max/min)), 
+                    (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (r * break_factor * (max/min)), 
                      5);
                 reflectance_read(&ref);
                 //reset direction
@@ -128,7 +129,9 @@ int main(void){
         }
         else
         {
+            if(ref.l3 > 15000 && ref.r3 > 15000)
             stop ++;
+            CyDelay(49);
         }
         
     }
