@@ -52,6 +52,11 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
+int turn_rate(int speed, int a, int break_factor, int min, int max){
+
+    return (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (a * break_factor * (max/min));
+}
+
 ///Serious attempt
 int main(void){
 
@@ -91,8 +96,8 @@ int main(void){
     while(stop < 2){    
        
         if(stop == 0){ 
-            speed = 255;
-            break_factor = 15;
+            speed = 100;
+            break_factor = 6;
         }
         else{ 
             speed = 50;
@@ -117,8 +122,8 @@ int main(void){
                 motor_turn(
                     //scale down speed by factor between 1 and 2
                                                            //further reduce speed to turn
-                    (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (l * break_factor * (max/min)), 
-                    (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (r * break_factor * (max/min)), 
+                    turn_rate(speed, l, break_factor, min, max), 
+                    turn_rate(speed, r, break_factor, min, max), 
                      5);
                 reflectance_read(&ref);
                 //reset direction
@@ -129,9 +134,9 @@ int main(void){
         }
         else
         {
-            if(ref.l3 > 15000 && ref.r3 > 15000)
-            stop ++;
-            CyDelay(49);
+            //if(ref.l3 > 15000 && ref.r3 > 15000)
+            //stop ++;
+            //CyDelay(49);
         }
         
     }
