@@ -53,8 +53,13 @@ int rread(void);
 */
 
 int turn_rate(int speed, int a, int break_factor, int min, int max){
-
-    return (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - (a * break_factor * (max/min));
+    int x;
+    x = (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - 
+        (a * break_factor * (max/min));
+    
+    if(x > 255) x = 255;
+    if(x < 0) x = 0;
+    return x;
 }
 
 ///Serious attempt
@@ -97,7 +102,7 @@ int main(void){
        
         if(stop == 0){ 
             speed = 100;
-            brake_factor = 6;
+            brake_factor = 15;
         }
         else{ 
             speed = 50;
@@ -122,9 +127,9 @@ int main(void){
                 motor_turn(
                     //scale down speed by factor between 1 and 2
                                                            //further reduce speed to turn
-                    turn_rate(speed, l, brake_factor, min, max), 
                     turn_rate(speed, r, brake_factor, min, max), 
-                     5);
+                    turn_rate(speed, l, brake_factor, min, max), 
+                     2);
                 reflectance_read(&ref);
                 //reset direction
                 r = 0; l = 0;    
