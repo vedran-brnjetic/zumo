@@ -91,17 +91,17 @@ int main(void){
     
     ///GO!
     int stop = 0;
-    int speed, break_factor;
+    int speed, brake_factor;
     
     while(stop < 2){    
        
         if(stop == 0){ 
             speed = 100;
-            break_factor = 6;
+            brake_factor = 6;
         }
         else{ 
             speed = 50;
-            break_factor = 3;
+            brake_factor = 3;
         }
         
         reflectance_read(&ref);
@@ -122,8 +122,8 @@ int main(void){
                 motor_turn(
                     //scale down speed by factor between 1 and 2
                                                            //further reduce speed to turn
-                    turn_rate(speed, l, break_factor, min, max), 
-                    turn_rate(speed, r, break_factor, min, max), 
+                    turn_rate(speed, l, brake_factor, min, max), 
+                    turn_rate(speed, r, brake_factor, min, max), 
                      5);
                 reflectance_read(&ref);
                 //reset direction
