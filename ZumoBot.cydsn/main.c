@@ -62,6 +62,12 @@ int turn_rate(int speed, int a, int break_factor, int min, int max){
     return x;
 }
 
+void should_I_stop(int l, int r, int *stop){
+    if(l > 16000 && r > 16000) {
+                stop ++;
+                CyDelay(10);
+            }
+}
 ///Serious attempt
 int main(void){
 
@@ -84,7 +90,7 @@ int main(void){
     
     motor_start();
     
-    /*//drive up to the first line
+    /* //drive up to the first line
     do{
         motor_forward(100, 5);
     }while( !dig.l3 && !dig.r3);
@@ -98,21 +104,29 @@ int main(void){
     int stop = 0;
     int speed, brake_factor;
     
-    while(stop < 2){    
-       
-        if(stop == 0){ 
-            speed = 100;
-            brake_factor = 15;
+    while(stop < 3){    
+        printf("%d %d", ref.l3, ref.r3);
+        printf("%d\n", stop);
+        
+        
+        if(stop < 2){ 
+            speed = 255;
+            brake_factor = 65;
         }
         else{ 
             speed = 50;
-            brake_factor = 3;
+            brake_factor = 15;
         }
         
         reflectance_read(&ref);
+        
+        
         if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){
             
-            motor_forward(speed, 10);
+            
+            motor_forward(speed, 1);
+            reflectance_read(&ref);
+            should_I_stop(ref.l3, ref.r3, &stop);
         }
         else if(ref.l1 != ref.r1){
             //max and min are to calculate the factor of the turn
@@ -122,27 +136,23 @@ int main(void){
             do{
                 if(ref.l1 > ref.r1){max = ref.l1; min = ref.r1; l = 1;}
                 else{max = ref.r1; min = ref.l1; r = 1;}
-            
-            
+                
+                
                 motor_turn(
                     //scale down speed by factor between 1 and 2
                                                            //further reduce speed to turn
-                    turn_rate(speed, r, brake_factor, min, max), 
                     turn_rate(speed, l, brake_factor, min, max), 
-                     2);
+                    turn_rate(speed, r, brake_factor, min, max), 
+                     1);
                 reflectance_read(&ref);
+                should_I_stop(ref.l3, ref.r3, &stop);
                 //reset direction
                 r = 0; l = 0;    
-            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000));
+            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop < 3);
             
             
         }
-        else
-        {
-            //if(ref.l3 > 15000 && ref.r3 > 15000)
-            //stop ++;
-            //CyDelay(49);
-        }
+        
         
     }
     
@@ -258,16 +268,17 @@ int main(void)
   motor_start();
     
     //motor_backward(20,10000);
-    //unsigned i;
+    unsigned i=10;
     reflectance_read(&ref);
     
-    while(ref.l1 < 18000 && ref.r1 < 18000 )
+    while(i>0)
     {
         reflectance_read(&ref);
         printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
-        motor_backward(50, 50);
+        motor_forward(255, 50);
         
-        CyDelay(49);
+        //CyDelay(10);
+        i--;
     }
     
     
