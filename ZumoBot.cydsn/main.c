@@ -51,19 +51,132 @@ int rread(void);
  * @details  ** You should enable global interrupt for operating properly. **<br>&nbsp;&nbsp;&nbsp;CyGlobalIntEnable;<br>
 */
 
-/*//play music
+
+
+/*//drive
 int main(){
-    int i;
+    //int i    
+    CyGlobalIntEnable; 
+    UART_1_Start();
     
+    //while(!(get_IR())){}
     motor_start();
     
-    for(i=1; i<0; i++){
-        motor_forward(i*10, 500);
-        motor_backward(i*10, 500);
-    }
+    //delay of execution
+    //speed from 0-255, time in miliseconds
+    motor_forward(0, 3000);
+    
+    //first line
+    motor_forward(100, 5460); //at speed 50 approx 10 cm per second
+    //speed of left motor, speed of right motor, time in milisecnods
+    motor_turn(205, 0, 360);
+    
+    //second line
+    motor_forward(100, 4000); //at speed 50 approx 10 cm per second
+    motor_turn(205, 0, 360);
+    
+    //third line
+    motor_forward(100, 5480); //at speed 50 approx 10 cm per second
+    
+    
+    //sharp turn
+    motor_turn(205, 0, 660);
+    //smooth curve
+    motor_turn(40, 60, 12200);
     
     motor_stop();
     return 0;
+    
+    //After some testing, batteries gave up at 4.8 V - 
+    //First the timings got shortened, later the motors no longer ran
+}//*/
+
+/// Follow a line
+int main(void)
+{
+    struct sensors_ ref;
+    struct sensors_ dig;
+    CyGlobalIntEnable; 
+    UART_1_Start();
+  
+    sensor_isr_StartEx(sensor_isr_handler);
+    
+    reflectance_start();
+
+    IR_led_Write(1);
+   
+    
+    //clear the initial sensor state (discharge the capacitor for the first time)
+    while(ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1 && ref.l1<1){
+        reflectance_read(&ref);
+    }
+    
+    motor_start();
+    
+    while(ref.l1 > 18000 || ref.r1 > 18000){
+        reflectance_read(&ref);
+    
+        if(ref.l1 > 18000 && ref.r1 > 18000){
+            motor_forward(50,50);  
+        }
+        else if(ref.l1 < 18000){
+            while(!(ref.l1 > 18000 && ref.r1 > 18000)){
+                motor_turn(50, 0, 5);
+                reflectance_read(&ref);
+            }
+        }
+        else if(ref.r1 < 18000){
+            while(!(ref.l1 > 18000 && ref.r1 > 18000)){
+                motor_turn(0, 50, 5);
+                reflectance_read(&ref);
+            }
+        }
+            
+     
+        CyDelay(49);
+    }
+    
+    motor_stop();
+
+
+}
+
+
+//*/
+/*//  Sensor testing
+int main(void)
+{
+    struct sensors_ ref;
+    struct sensors_ dig;
+    CyGlobalIntEnable; 
+    UART_1_Start();
+  
+    sensor_isr_StartEx(sensor_isr_handler);
+    
+    reflectance_start();
+
+    IR_led_Write(1);
+    
+  motor_start();
+    
+    //motor_backward(20,10000);
+    //unsigned i;
+    reflectance_read(&ref);
+    
+    while(ref.l1 < 18000 && ref.r1 < 18000 )
+    {
+        reflectance_read(&ref);
+        printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
+        motor_backward(50, 50);
+        
+        CyDelay(49);
+    }
+    
+    
+    motor_stop();
+    
+    
+return 0;
 }//*/
 
 /*//battery level//

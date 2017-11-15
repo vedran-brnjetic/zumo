@@ -2,7 +2,7 @@
  * @file    Motor.c
  * @brief   Basic methods for operating motor sensor. For more details, please refer to Motor.h file. 
  * @details included in Zumo shield
-*/
+*/ 
 #include "Motor.h"
 
 
