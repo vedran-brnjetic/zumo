@@ -300,7 +300,8 @@ int main()
         }
 
         /*right sensor is out of line ==> turn left*/
-        if(dig.l3==1 && dig.l1==0 && dig.r1==1 && dig.r3==1){
+        if 
+        (dig.l3==1 && dig.l1==0 && dig.r1==1 && dig.r3==1){
         motor_turnleft(50,70,0);
         }
 
