@@ -62,11 +62,13 @@ int turn_rate(int speed, int a, int break_factor, int min, int max){
     return x;
 }
 
-void should_I_stop(int l, int r, int *stop){
+int should_I_stop(int l, int r, int stop){
     if(l > 16000 && r > 16000) {
-                stop ++;
-                CyDelay(10);
-            }
+        motor_forward(80, 200);
+        CyDelay(200);
+        return 3;
+    }
+    return stop;
 }
 ///Serious attempt
 int main(void){
@@ -111,7 +113,7 @@ int main(void){
         
         if(stop < 2){ 
             speed = 255;
-            brake_factor = 65;
+            brake_factor = 70;
         }
         else{ 
             speed = 50;
@@ -126,7 +128,7 @@ int main(void){
             
             motor_forward(speed, 1);
             reflectance_read(&ref);
-            should_I_stop(ref.l3, ref.r3, &stop);
+            stop = should_I_stop(ref.l3, ref.r3, stop);
         }
         else if(ref.l1 != ref.r1){
             //max and min are to calculate the factor of the turn
@@ -145,7 +147,7 @@ int main(void){
                     turn_rate(speed, r, brake_factor, min, max), 
                      1);
                 reflectance_read(&ref);
-                should_I_stop(ref.l3, ref.r3, &stop);
+                stop = should_I_stop(ref.l3, ref.r3, stop);
                 //reset direction
                 r = 0; l = 0;    
             }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop < 3);
