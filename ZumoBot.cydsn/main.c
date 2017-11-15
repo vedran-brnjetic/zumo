@@ -54,7 +54,7 @@ int rread(void);
 
 int turn_rate(int speed, int a, int break_factor, int min, int max){
     int x;
-    x = (int)( (float)speed / (2 - (1 - (( (float)max / min) / 8))) ) - 
+    x = (int)( (float)speed / (1.8 - (1 - (( (float)max / min) / 8))) ) - 
         (a * break_factor * (max/min));
     
     if(x > 255) x = 255;
@@ -92,14 +92,18 @@ int main(void){
     
     motor_start();
     
-    /* //drive up to the first line
+    ///drive up to the first line
     do{
         motor_forward(100, 5);
-    }while( !dig.l3 && !dig.r3);
+        reflectance_read(&ref);
+    }while( ref.l3 < 15000 && ref.r3 < 15000);
     //*/
+    motor_stop();
     
-    /*//Wait for the IR signal
+    ///Wait for the IR signal
     while(!(get_IR())){}
+    motor_start();
+    motor_forward(255, 150);
     //*/
     
     ///GO!
@@ -113,7 +117,7 @@ int main(void){
         
         if(stop < 2){ 
             speed = 255;
-            brake_factor = 70;
+            brake_factor = 125;
         }
         else{ 
             speed = 50;
