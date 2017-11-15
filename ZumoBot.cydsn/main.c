@@ -54,11 +54,12 @@ int rread(void);
 
 int turn_rate(int speed, int a, int break_factor, int min, int max){
     int x;
-    x = (int)( (float)speed / (1.8 - (1 - (( (float)max / min) / 8))) ) - 
-        (a * break_factor * (max/min));
+    x = (int)( (float)speed / (1.5 - (1 - (( (float)max / min) / 8))) ) - 
+    (int)(a * break_factor * ((float)max / min));
     
     if(x > 255) x = 255;
     if(x < 0) x = 0;
+    
     return x;
 }
 
@@ -66,7 +67,7 @@ int should_I_stop(int l, int r, int lm, int rm, int stop){
     if(l > 16000 && r > 16000) {
         motor_forward(80, 200);
         CyDelay(200);
-        return 3;
+        return 1;
     }
     else if(rm < 5000 && lm < 5000){
             motor_backward(255, 10);
@@ -115,19 +116,13 @@ int main(void){
     int stop = 0;
     int speed, brake_factor;
     
-    while(stop < 3){    
-        printf("%d %d", ref.l3, ref.r3);
-        printf("%d\n", stop);
-        
-        
-        if(stop < 2){ 
-            speed = 255;
-            brake_factor = 125;
-        }
-        else{ 
-            speed = 50;
-            brake_factor = 15;
-        }
+    while(stop < 1){    
+//      printf("%d %d", ref.l3, ref.r3);
+//      printf("%d\n", stop);
+      
+        speed = 255;
+        brake_factor = 175;
+       
         
         reflectance_read(&ref);
         
