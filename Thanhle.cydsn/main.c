@@ -223,7 +223,30 @@ int main()
     }
 }   
 //*/
-
+void motor_turnleft(uint8 l_speed, uint8 r_speed, uint32 delay)
+{
+    MotorDirLeft_Write(1);      // set LeftMotor backward mode
+    MotorDirRight_Write(0);     // set RightMotor backward mode
+    PWM_WriteCompare1(l_speed); 
+    PWM_WriteCompare2(r_speed); 
+    CyDelay(delay);
+};
+void motor_turnright(uint8 l_speed, uint8 r_speed, uint32 delay)
+{
+    MotorDirLeft_Write(0);      // set LeftMotor backward mode
+    MotorDirRight_Write(1);     // set RightMotor backward mode
+    PWM_WriteCompare1(l_speed); 
+    PWM_WriteCompare2(r_speed); 
+    CyDelay(delay);
+};
+void motor_ahead(uint8 l_speed, uint8 r_speed, uint32 delay)
+{
+    MotorDirLeft_Write(0);      // set LeftMotor backward mode
+    MotorDirRight_Write(0);     // set RightMotor backward mode
+    PWM_WriteCompare1(l_speed); 
+    PWM_WriteCompare2(r_speed); 
+    CyDelay(delay);
+};
 
 ///reflectance//
 int main()
@@ -244,32 +267,48 @@ int main()
         printf("%d %d %d %d \r\n", ref.l3, ref.l1, ref.r1, ref.r3);       //print out each period of reflectance sensors
         reflectance_digital(&dig);      //print out 0 or 1 according to results of reflectance period
         printf("%d %d %d %d \r\n", dig.l3, dig.l1, dig.r1, dig.r3);        //print out 0 or 1 according to results of reflectance period
+        
 
         /*no black line*/
         if (dig.l3==1 && dig.l1==1 && dig.r1==1 && dig.r3==1){
-        motor_forward(150,1500);
+        motor_forward(80,0);
         }
-        /*meet black line ==> turn left*/
+        if (dig.r1==0){
+        motor_ahead(35,70,0);
+        }
+        if (dig.l1==0){
+        motor_ahead(70,35,0);
+        }
+        /*meet black line ==> turn*/
         if(dig.l3==0 && dig.l1==0 && dig.r1==0 && dig.r3==0){
-        motor_turn(0,50,1000);
+        motor_turnleft(50,150,0);
+        }
+        if(dig.l3==0 && dig.l1==0 && dig.r1==1 && dig.r3==1){
+        motor_turnright(100,100,0);
+        }
+        if(dig.l3==1 && dig.l1==1 && dig.r1==0 && dig.r3==0){
+        motor_turnleft(100,100,0);
         }
         /*run on black line ==> follow the line*/
         if(dig.l3==1 && dig.l1==0 && dig.r1==0 && dig.r3==1){
-        motor_forward(150,1000);
+        motor_forward(100,0);
         }
+        
         /*left sensor is out of line ==> turn right*/
         if(dig.l3==1 && dig.l1==1 && dig.r1==0 && dig.r3==1){
-        motor_turn(170,0,1500);
+        motor_turnright(70,50,0);
         }
+
         /*right sensor is out of line ==> turn left*/
-        if(dig.l3==1 && dig.l1==1 && dig.r1==0 && dig.r3==1){
-        motor_turn(0,170,1500);
-        }                  
-        
-        CyDelayUs(100);
+        if(dig.l3==1 && dig.l1==0 && dig.r1==1 && dig.r3==1){
+        motor_turnleft(50,70,0);
+        }
+
+        CyDelayUs(500);
     };
         
-        
+    
+     
     }   
 //*/
 
