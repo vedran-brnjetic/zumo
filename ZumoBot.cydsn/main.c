@@ -156,8 +156,8 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=10; //scaling factor
-                float kp = 0.069;
+                float x=1.5; //scaling factor
+                float kp = 0.69;
                 float kd = 0;
                 float PV = 0;
                 
