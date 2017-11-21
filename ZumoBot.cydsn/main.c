@@ -72,8 +72,8 @@ void should_I_stop(int l, int r, int lm, int rm, int * flag, int * stop){
         * flag = * flag - 1;
     }
     else if(rm < 5000 && lm < 5000){
-            motor_backward(255, 10);
-            motor_forward(255, 1);
+            //motor_backward(255, 10);
+            //motor_forward(255, 1);
      
     }
 }
@@ -97,9 +97,9 @@ int main(void){
         reflectance_read(&ref);
     }
     
-    //motor_start();
+    motor_start();
     
-    /*//drive up to the first line
+    ///drive up to the first line
     do{
         motor_forward(100, 5);
         reflectance_read(&ref);
@@ -108,7 +108,7 @@ int main(void){
     motor_stop();
     //*/
     
-    /*//Wait for the IR signal
+    ///Wait for the IR signal
     while(!(get_IR())){}
     motor_start();
     motor_forward(255, 150);
@@ -120,7 +120,7 @@ int main(void){
     int speed = 0, brake_factor = 0;
     float error=0, lastError=0;
     
-    while( 1){    
+    while( stop<=1){    
 //      printf("%d %d", ref.l3, ref.r3);
 //      printf("%d\n", stop);
         
@@ -132,17 +132,17 @@ int main(void){
         }
         
         reflectance_read(&ref);
-        error = (float)(ref.l1 - ref.r1) / 2;
+        //error = (float)(ref.l1 - ref.r1) / 2;
         
-        //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
+        should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
         
         
-        if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){                        
+        /*if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){                        
             //motor_forward(speed, 1);
             reflectance_read(&ref);
             //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
         }
-        else if(ref.l1 != ref.r1){
+        else*/ if(1){
             //max and min are to calculate the factor of the turn
             //r and l to pick the correct motor to slow down
             int max, min, r = 0, l = 0;
@@ -158,13 +158,13 @@ int main(void){
 
                 
                 float kp= 0.0069;
-                float kd= 0.0013;
+                float kd= 0.013;
                 float PV;
                 
                 PV = kp * error + kd * (error - lastError);
                 lastError = error;
                 printf("%f\n", error);
-                CyDelay(250);
+                //CyDelay(250);
                 if (PV > 55){
                     PV = 55;
                 }
@@ -174,18 +174,18 @@ int main(void){
                 }
                 
                 //reflectance_read(&ref);
-                /*//
+                ///
                 motor_turn(
-                    100 + PV, 
-                    100 - PV,
+                    200 - PV, 
+                    200 + PV,
                      1);///*/
                 reflectance_read(&ref);
-                //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
+                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
                 //reset direction
                 r = 0; l = 0;    
                 //*/
                 //printf("%f\n", PV);
-            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop <= 1);
+            }while(stop<=1);
             
             
         }
