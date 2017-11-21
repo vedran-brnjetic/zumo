@@ -124,13 +124,13 @@ int main(void){
 //      printf("%d %d", ref.l3, ref.r3);
 //      printf("%d\n", stop);
         
-        speed = 255;
+        /*speed = 255;
         brake_factor = 175;
         if(stop>0){
             speed = 100;
             brake_factor = 60;
         }
-        
+        */
         reflectance_read(&ref);
         //error = (float)(ref.l1 - ref.r1) / 2;
         
@@ -156,12 +156,12 @@ int main(void){
                     error = -9000;
                 }
 
+                float x=1.8; //scaling factor
+                float kp = 0.0069;
+                float kd = 0.013;
+                float PV = 0;
                 
-                float kp= 0.0069;
-                float kd= 0.013;
-                float PV;
-                
-                PV = kp * error + kd * (error - lastError);
+                PV = x * kp * error + x * kd * (error - lastError);
                 lastError = error;
                 printf("%f\n", error);
                 //CyDelay(250);
