@@ -81,7 +81,7 @@ void should_I_stop(int l, int r, int lm, int rm, int * flag, int * stop){
 int main(void){
 
     struct sensors_ ref;
-    struct sensors_ dig;
+    //struct sensors_ dig;
     CyGlobalIntEnable; 
     UART_1_Start();
   
@@ -117,12 +117,14 @@ int main(void){
     ///GO!
     int stop = 0;
     int flag = 1;
-    int speed = 0, brake_factor = 0;
     float error=0, lastError=0;
     
     while( stop<=1){    
             do{
-                float error = (float)((ref.l1 - ref.r1) / 2);
+                reflectance_read(&ref);
+                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);                
+                
+                error = (float)((ref.l1 - ref.r1) / 2);
                 if(ref.l1 > ref.r1 && ref.l1 < 18000){
                     error = 9000;
                 }
@@ -151,15 +153,14 @@ int main(void){
                     170 - PV, 
                     170 + PV,
                      1);///*/
-                reflectance_read(&ref);
-                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);                
+                
             }while(stop<=1);
             
             
         }
         
         
-    }
+    
     
     motor_stop();
     return 0;
