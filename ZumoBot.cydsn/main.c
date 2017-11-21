@@ -165,19 +165,19 @@ int main(void){
                 lastError = error;
                 printf("%f\n", error);
                 //CyDelay(250);
-                if (PV > 55){
-                    PV = 55;
+                if (PV > 85){
+                    PV = 85;
                 }
                   
-                if (PV < -55){
-                    PV = -55;
+                if (PV < -85){
+                    PV = -85;
                 }
                 
                 //reflectance_read(&ref);
                 ///
                 motor_turn(
-                    200 - PV, 
-                    200 + PV,
+                    170 - PV, 
+                    170 + PV,
                      1);///*/
                 reflectance_read(&ref);
                 should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
