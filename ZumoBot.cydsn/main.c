@@ -121,32 +121,6 @@ int main(void){
     float error=0, lastError=0;
     
     while( stop<=1){    
-//      printf("%d %d", ref.l3, ref.r3);
-//      printf("%d\n", stop);
-        
-        /*speed = 255;
-        brake_factor = 175;
-        if(stop>0){
-            speed = 100;
-            brake_factor = 60;
-        }
-        */
-        reflectance_read(&ref);
-        //error = (float)(ref.l1 - ref.r1) / 2;
-        
-        should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
-        
-        
-        /*if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){                        
-            //motor_forward(speed, 1);
-            reflectance_read(&ref);
-            //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
-        }
-        else*/ if(1){
-            //max and min are to calculate the factor of the turn
-            //r and l to pick the correct motor to slow down
-            int max, min, r = 0, l = 0;
-            
             do{
                 float error = (float)((ref.l1 - ref.r1) / 2);
                 if(ref.l1 > ref.r1 && ref.l1 < 18000){
@@ -156,14 +130,14 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=1.5; //scaling factor
-                float kp = 0.69;
+                float x=0.0001; //scaling factor
+                float kp = 69;
                 float kd = 0;
                 float PV = 0;
                 
                 PV = x * kp * error + x * kd * (error - lastError);
                 lastError = error;
-                printf("%f\n", error);
+                printf("%f\n", PV);
                 //CyDelay(250);
                 if (PV > 85){
                     PV = 85;
@@ -172,19 +146,13 @@ int main(void){
                 if (PV < -85){
                     PV = -85;
                 }
-                
-                //reflectance_read(&ref);
                 ///
                 motor_turn(
                     170 - PV, 
                     170 + PV,
                      1);///*/
                 reflectance_read(&ref);
-                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
-                //reset direction
-                r = 0; l = 0;    
-                //*/
-                //printf("%f\n", PV);
+                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);                
             }while(stop<=1);
             
             
