@@ -97,9 +97,10 @@ int main(void){
         reflectance_read(&ref);
     }
     
-    motor_start();
+    
     
     ///drive up to the first line
+    motor_start();
     do{
         motor_forward(100, 5);
         reflectance_read(&ref);
@@ -117,7 +118,7 @@ int main(void){
     ///GO!
     int stop = 0;
     int flag = 1;
-    float error=0, lastError=0;
+    float error = 0, lastError = 0;
     
     while( stop<=1){    
             do{
@@ -132,26 +133,27 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=0.0001; //scaling factor
+                float x=0.00013; //scaling factor
                 float kp = 69;
-                float kd = 0;
+                float kd = 13;
                 float PV = 0;
                 
                 PV = x * kp * error + x * kd * (error - lastError);
                 lastError = error;
-                printf("%f\n", PV);
-                //CyDelay(250);
-                if (PV > 85){
-                    PV = 85;
-                }
-                  
-                if (PV < -85){
-                    PV = -85;
-                }
+                
+                //CyDelay(500);
+                float left = 200 - (2.2 * PV);
+                float right = 200 + (2.2 * PV);
+                
+                if(left>255) left = 255;
+                if(right>255) right = 255;
+                if(left<0) left = 0;
+                if(right<0) right = 0;
+                printf("%d\t%d\t%f\t%f\t%f\t\n", ref.l1, ref.r1, left, right, PV);
                 ///
                 motor_turn(
-                    170 - PV, 
-                    170 + PV,
+                    left, 
+                    right,
                      1);///*/
                 
             }while(stop<=1);
