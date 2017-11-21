@@ -72,8 +72,8 @@ void should_I_stop(int l, int r, int lm, int rm, int * flag, int * stop){
         * flag = * flag - 1;
     }
     else if(rm < 5000 && lm < 5000){
-            //motor_backward(255, 10);
-            //motor_forward(255, 1);
+            motor_backward(255, 10);
+            motor_forward(255, 1);
      
     }
 }
@@ -111,12 +111,12 @@ int main(void){
     ///Wait for the IR signal
     while(!(get_IR())){}
     motor_start();
-    motor_forward(255, 150);
+    
     //*/
     
     ///GO!
     int stop = 0;
-    int flag = 0;
+    int flag = 1;
     int speed = 0, brake_factor = 0;
     float error=0, lastError=0;
     
@@ -156,9 +156,9 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=1.8; //scaling factor
-                float kp = 0.0069;
-                float kd = 0.013;
+                float x=10; //scaling factor
+                float kp = 0.069;
+                float kd = 0;
                 float PV = 0;
                 
                 PV = x * kp * error + x * kd * (error - lastError);
