@@ -97,17 +97,18 @@ int main(void){
         reflectance_read(&ref);
     }
     
-    motor_start();
+    //motor_start();
     
-    ///drive up to the first line
+    /*//drive up to the first line
     do{
         motor_forward(100, 5);
         reflectance_read(&ref);
     }while( ref.l3 < 15000 && ref.r3 < 15000);
-    //*/
-    motor_stop();
     
-    ///Wait for the IR signal
+    motor_stop();
+    //*/
+    
+    /*//Wait for the IR signal
     while(!(get_IR())){}
     motor_start();
     motor_forward(255, 150);
@@ -116,28 +117,30 @@ int main(void){
     ///GO!
     int stop = 0;
     int flag = 0;
-    int speed, brake_factor;
+    int speed = 0, brake_factor = 0;
+    float error=0, lastError=0;
     
-    while(stop <= 1){    
+    while( 1){    
 //      printf("%d %d", ref.l3, ref.r3);
 //      printf("%d\n", stop);
         
         speed = 255;
         brake_factor = 175;
         if(stop>0){
-            speed = 255;
-            brake_factor = 175;
+            speed = 100;
+            brake_factor = 60;
         }
         
         reflectance_read(&ref);
+        error = (float)(ref.l1 - ref.r1) / 2;
+        
+        //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
         
         
-        if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){
-            
-            
-            motor_forward(speed, 1);
+        if(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000){                        
+            //motor_forward(speed, 1);
             reflectance_read(&ref);
-            should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
+            //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
         }
         else if(ref.l1 != ref.r1){
             //max and min are to calculate the factor of the turn
@@ -145,20 +148,43 @@ int main(void){
             int max, min, r = 0, l = 0;
             
             do{
-                if(ref.l1 > ref.r1){max = ref.l1; min = ref.r1; l = 1;}
-                else{max = ref.r1; min = ref.l1; r = 1;}
+                float error = (float)((ref.l1 - ref.r1) / 2);
+                if(ref.l1 > ref.r1 && ref.l1 < 18000){
+                    error = 9000;
+                }
+                if(ref.r1 > ref.l1 && ref.r1 < 18000){
+                    error = -9000;
+                }
+
                 
+                float kp= 0.0069;
+                float kd= 0.0013;
+                float PV;
                 
+                PV = kp * error + kd * (error - lastError);
+                lastError = error;
+                printf("%f\n", error);
+                CyDelay(250);
+                if (PV > 55){
+                    PV = 55;
+                }
+                  
+                if (PV < -55){
+                    PV = -55;
+                }
+                
+                //reflectance_read(&ref);
+                /*//
                 motor_turn(
-                    //scale down speed by factor between 1 and 2
-                                                           //further reduce speed to turn
-                    turn_rate(speed, l, brake_factor, min, max), 
-                    turn_rate(speed, r, brake_factor, min, max), 
-                     1);
+                    100 + PV, 
+                    100 - PV,
+                     1);///*/
                 reflectance_read(&ref);
-                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
+                //should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
                 //reset direction
                 r = 0; l = 0;    
+                //*/
+                //printf("%f\n", PV);
             }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop <= 1);
             
             
