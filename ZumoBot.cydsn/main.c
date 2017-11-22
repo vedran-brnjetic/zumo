@@ -120,8 +120,12 @@ int main(void){
     int flag = 1;
     float error = 0, lastError = 0;
     
+    long int i=0;
+    
     while( stop<=1){    
+        
             do{
+                
                 reflectance_read(&ref);
                 should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);                
                 
@@ -132,18 +136,28 @@ int main(void){
                 if(ref.r1 > ref.l1 && ref.r1 < 18000){
                     error = -9000;
                 }
-
-                float x=0.00286; //scaling factor
-                float kp = 69;
-                float kd = 20;
+                
+                float x=0.00013; //scaling factor
+                float kp = 145;
+                float kd = 0;
                 float PV = 0;
+                
+                i++;
+                if(i % 3000 == 0){
+                    motor_stop();
+                    while(!(get_IR())){}
+                    motor_start();
+                    kp+=5;
+                    i=0;
+                }
+                
                 
                 PV = x * (kp * error + kd * (error - lastError));
                 lastError = error;
                 
                 //CyDelay(500);
                 float left = 200 - PV;
-                float right = 200 + 2.2 * PV;
+                float right = 200 + PV;
                 
                 if(left>255) left = 255;
                 if(right>255) right = 255;
