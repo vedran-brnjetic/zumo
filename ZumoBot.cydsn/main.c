@@ -54,7 +54,7 @@ int rread(void);
 
 int turn_rate(int speed, int a, int break_factor, int min, int max){
     int x;
-    x = (int)( (float)speed / (1.3 - (1 - (( (float)max / min) / 8))) ) - 
+    x = (int)( (float)speed / (1.48 - (1 - (( (float)max / min) / 8.1))) ) - 
     (int)(a * break_factor * ((float)max / min));
     
     if(x > 255) x = 255;
@@ -123,7 +123,7 @@ int main(void){
 //      printf("%d\n", stop);
       
         speed = 255;
-        brake_factor = 175;
+        brake_factor = 190;
        
         
         reflectance_read(&ref);
@@ -156,7 +156,7 @@ int main(void){
                 should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
                 //reset direction
                 r = 0; l = 0;    
-            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop < 3);
+            }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop <= 1);
             
             
         }
