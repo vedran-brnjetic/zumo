@@ -133,17 +133,17 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=0.00013; //scaling factor
+                float x=0.000286; //scaling factor
                 float kp = 69;
                 float kd = 13;
                 float PV = 0;
                 
-                PV = x * kp * error + x * kd * (error - lastError);
+                PV = x * (kp * error + kd * (error - lastError));
                 lastError = error;
                 
                 //CyDelay(500);
-                float left = 200 - (2.2 * PV);
-                float right = 200 + (2.2 * PV);
+                float left = 200 - PV;
+                float right = 200 + 2.2 * PV;
                 
                 if(left>255) left = 255;
                 if(right>255) right = 255;
