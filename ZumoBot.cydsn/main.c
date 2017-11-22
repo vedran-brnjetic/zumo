@@ -142,6 +142,7 @@ int main(void){
                 float kd = 0;
                 float PV = 0;
                 
+                //remove from production - a testing setup to tune the kp in increments of 5
                 i++;
                 if(i % 3000 == 0){
                     motor_stop();
