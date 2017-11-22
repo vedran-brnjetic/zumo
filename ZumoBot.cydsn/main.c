@@ -133,9 +133,9 @@ int main(void){
                     error = -9000;
                 }
 
-                float x=0.000286; //scaling factor
+                float x=0.00286; //scaling factor
                 float kp = 69;
-                float kd = 13;
+                float kd = 20;
                 float PV = 0;
                 
                 PV = x * (kp * error + kd * (error - lastError));
