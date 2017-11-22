@@ -54,7 +54,7 @@ int rread(void);
 
 int turn_rate(int speed, int a, int break_factor, int min, int max){
     int x;
-    x = (int)( (float)speed / (1.5 - (1 - (( (float)max / min) / 8))) ) - 
+    x = (int)( (float)speed / (1.3 - (1 - (( (float)max / min) / 8))) ) - 
     (int)(a * break_factor * ((float)max / min));
     
     if(x > 255) x = 255;
@@ -63,18 +63,19 @@ int turn_rate(int speed, int a, int break_factor, int min, int max){
     return x;
 }
 
-int should_I_stop(int l, int r, int lm, int rm, int stop){
-    if(l > 16000 && r > 16000) {
-        motor_forward(80, 200);
-        CyDelay(200);
-        return 1;
+void should_I_stop(int l, int r, int lm, int rm, int * flag, int * stop){
+    if(l > 16000 && r > 16000 && * flag == 0) {
+        * flag = * flag + 1; 
+        * stop = * stop + 1;
+    }
+    else if(l < 16000 && r < 16000 && * flag == 1){
+        * flag = * flag - 1;
     }
     else if(rm < 5000 && lm < 5000){
             motor_backward(255, 10);
             motor_forward(255, 1);
-            return stop;
+     
     }
-    return stop;
 }
 ///Serious attempt
 int main(void){
@@ -109,14 +110,15 @@ int main(void){
     ///Wait for the IR signal
     while(!(get_IR())){}
     motor_start();
-    motor_forward(255, 150);
+    //motor_forward(255, 150);
     //*/
     
     ///GO!
     int stop = 0;
+    int flag = 1;
     int speed, brake_factor;
     
-    while(stop < 1){    
+    while(stop <= 1){    
 //      printf("%d %d", ref.l3, ref.r3);
 //      printf("%d\n", stop);
       
@@ -132,7 +134,7 @@ int main(void){
             
             motor_forward(speed, 1);
             reflectance_read(&ref);
-            stop = should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, stop);
+            should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
         }
         else if(ref.l1 != ref.r1){
             //max and min are to calculate the factor of the turn
@@ -151,7 +153,7 @@ int main(void){
                     turn_rate(speed, r, brake_factor, min, max), 
                      1);
                 reflectance_read(&ref);
-                stop = should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, stop);
+                should_I_stop(ref.l3, ref.r3, ref.l1, ref.r1, &flag, &stop);
                 //reset direction
                 r = 0; l = 0;    
             }while(!(19000 < ref.l1 && ref.l1 < 21000 && 19000 < ref.r1 && ref.r1 < 21000) && stop < 3);
