@@ -72,8 +72,8 @@ void should_I_stop(int l, int r, int lm, int rm, int * flag, int * stop){
         * flag = * flag - 1;
     }
     else if(rm < 5000 && lm < 5000){
-            motor_backward(255, 10);
-            motor_forward(255, 1);
+            motor_backward(155, 10);
+            motor_forward(155, 1);
      
     }
 }
@@ -122,6 +122,13 @@ int main(void){
     
     long int i=0;
     
+    float x=0.0013; //scaling factor
+    float kp = 39;
+    float kd = 680;
+    float PV = 0;
+    //float minErrDiff=0;
+    //float maxErrDiff=0;
+    
     while( stop<=1){    
         
             do{
@@ -137,35 +144,48 @@ int main(void){
                     error = -9000;
                 }
                 
-                float x=0.00013; //scaling factor
-                float kp = 145;
-                float kd = 0;
-                float PV = 0;
                 
-                //remove from production - a testing setup to tune the kp in increments of 5
+                //kp between 95 and 125 works smooth
+                /*//remove from production - a testing setup to tune the kp in increments of 5
                 i++;
-                if(i % 3000 == 0){
+                if(i % 2000 == 0){
                     motor_stop();
                     while(!(get_IR())){}
                     motor_start();
-                    kp+=5;
-                    i=0;
+                    kd += 5;
+                    i = 0;
                 }
+                printf("%f\n", kp);
+                //*/
                 
+                PV = x * (kp * error + (kd * (error - lastError)));
                 
-                PV = x * (kp * error + kd * (error - lastError));
-                lastError = error;
-                
+                float left, right;
                 //CyDelay(500);
-                float left = 200 - PV;
-                float right = 200 + PV;
                 
-                if(left>255) left = 255;
-                if(right>255) right = 255;
+                    left = 234 - PV;
+                    right = 234 + PV;
+                
+                
+                if(left>255) left = 234;
+                if(right>255) right = 234;
                 if(left<0) left = 0;
                 if(right<0) right = 0;
-                printf("%d\t%d\t%f\t%f\t%f\t\n", ref.l1, ref.r1, left, right, PV);
-                ///
+                //motor_stop();
+                //float errDiff = error - lastError;
+                /*
+                if(errDiff < 0){
+                    if(-errDiff < minErrDiff) minErrDiff = -errDiff;
+                    if(-errDiff > maxErrDiff) maxErrDiff = -errDiff;
+                }
+                else{
+                    if(errDiff < minErrDiff) minErrDiff = errDiff;
+                    if(errDiff > maxErrDiff) maxErrDiff = errDiff;
+                
+                }
+                printf("%f\t%f\t%f\t%f\t%f\t%f\n", left, right, PV, errDiff, minErrDiff, maxErrDiff);
+                */
+                lastError = error;///
                 motor_turn(
                     left, 
                     right,
